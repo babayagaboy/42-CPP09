@@ -13,9 +13,11 @@
 #ifndef BITCOINEXCHANGE_HPP
 # define BITCOINEXCHANGE_HPP
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <map>
+#include <sstream>
+#include <stdexcept>
 
 class BitcoinExchange
 {
@@ -28,6 +30,7 @@ class BitcoinExchange
 		~BitcoinExchange( void );
 	
 		void readdata();
+		void printdata();
 	};
 
 #endif

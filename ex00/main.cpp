@@ -15,6 +15,7 @@
 
 int main(int ac, char **av)
 {
+	(void)av;
 	if(ac != 2)
 		return (1);
 
@@ -23,6 +24,7 @@ int main(int ac, char **av)
 	try
 	{
 		be.readdata();
+		be.printdata();
 	}
 	catch(const std::exception& e)
 	{

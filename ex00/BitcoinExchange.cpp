@@ -33,19 +33,41 @@ BitcoinExchange::~BitcoinExchange( void )
 
 void BitcoinExchange::readdata()
 {
-	std::ifstream file;
-
-	file.open("./data.csv");
-
-	std::string a;
-	std::getline(file, a);
-	if(a != "date,exchange_rate")
-		throw ;
-
+	std::ifstream file("./data.csv");
+	std::string line;
+	std::string date;
+	std::string valueStr;
 	std::string::size_type comma;
-	while (std::getline(file, a))
+	double value;
+
+	if (!file.is_open())
+		throw std::runtime_error("Unable to open data.csv");
+	if (!std::getline(file, line) || line != "date,exchange_rate")
+		throw std::runtime_error("Invalid CSV header");
+	while (std::getline(file, line))
 	{
-		// comma = a;
-		std::cout << a << std::endl;
+		if (line.empty())
+			continue;
+		if (line[line.size() - 1] == '\r')
+			line.erase(line.size() - 1);
+		comma = line.find(',');
+		if (comma == std::string::npos)
+			continue;
+		date = line.substr(0, comma);
+		valueStr = line.substr(comma + 1);
+		if (date.empty() || valueStr.empty())
+			continue;
+		std::istringstream iss(valueStr);
+		if (!(iss >> value))
+			continue;
+		this->_data[date] = value;
 	}
+}
+
+void BitcoinExchange::printdata()
+{
+	std::map<std::string, double>::const_iterator it = this->_data.begin();
+
+	for (; it != this->_data.end(); ++it)
+		std::cout << it->first << " => " << it->second << std::endl;
 }
