@@ -27,7 +27,7 @@ $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 	@echo "\nReady!"
 
-$(OBJDIR)/%.o: %.cpp
+$(OBJDIR)/%.o: %.cpp BitcoinExchange.hpp
 	mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
@@ -37,10 +37,10 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-re: fclean all
-
 noflags:
 	$(CXX) $(SRCS) -o $(NAME)
 	@echo "\nReady without flags!"
+
+re: fclean all
 
 .PHONY: all clean fclean re

@@ -18,6 +18,7 @@
 #include <map>
 #include <sstream>
 #include <stdexcept>
+#include <string>
 
 class BitcoinExchange
 {
@@ -29,8 +30,11 @@ class BitcoinExchange
 		BitcoinExchange& operator=( const BitcoinExchange& other );
 		~BitcoinExchange( void );
 	
+		void run(const std::string& filename);
 		void readdata();
 		void printdata();
-	};
+		void readinput(const std::string& filename) const;
+		void exchange(const std::string& line) const;
+};
 
 #endif
