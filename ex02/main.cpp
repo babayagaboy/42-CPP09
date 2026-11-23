@@ -14,7 +14,9 @@
 #include <iostream>
 #include <climits>
 #include <deque>
-#include <list>
+#include <vector>
+#include <ctime>
+#include <iomanip>
 
 bool coin_flip()
 {
@@ -50,7 +52,7 @@ int main(int ac, char **av)
 	int num = 0;
 
 	std::deque<int> cont_deque;
-	std::list<int> cont_list;
+	std::vector<int> cont_vector;
 
 	if (ac < 2)
 		return (1);
@@ -70,23 +72,47 @@ int main(int ac, char **av)
 			return (1);
 		}
 		cont_deque.push_back(num);
-		cont_list.push_back(num);
+		cont_vector.push_back(num);
 	}
 
+	
 	std::cout << "Before: ";
-
 	if(coin_flip())
 		PEMERGEME::print_cont(cont_deque);
 	else
-		PEMERGEME::print_cont(cont_list);
+		PEMERGEME::print_cont(cont_vector);
+	std::cout << std::endl;
 
+	clock_t start = clock();
+	PEMERGEME::sort(cont_vector);
+	double vector_time = static_cast<double>(clock() - start) / CLOCKS_PER_SEC;
+
+	start = clock();
 	PEMERGEME::sort(cont_deque);
-		
-	// std::cout << "std::deque = ";
-	// std::cout << std::endl;
+	double deque_time = static_cast<double>(clock() - start) / CLOCKS_PER_SEC;
 	
-	// std::cout << "std::list = ";
-	// std::cout << std::endl;
+	
+	std::cout << "After: ";
+	if(coin_flip())
+		PEMERGEME::print_cont(cont_deque);
+	else
+		PEMERGEME::print_cont(cont_vector);
+	std::cout << std::endl;
+
+	std::cout
+		<< "Time to process a range of " 
+		<< ac - 1
+		<< " elements with std::vector : "
+		<< std::fixed << vector_time
+		<< std::endl;
+	
+	std::cout
+		<< "Time to process a range of " 
+		<< ac - 1
+		<< " elements with std::deque : "
+		<< std::fixed << deque_time
+		<< std::endl;
+	
 
 	return (0);
 }
