@@ -53,8 +53,10 @@ void BitcoinExchange::readdata()
 
 	if (!file.is_open())
 		throw std::runtime_error("unable to open data.csv");
+
 	if (!std::getline(file, line) || trim(line) != "date,exchange_rate")
 		throw std::runtime_error("invalid CSV header");
+
 	this->_data.clear();
 	while (std::getline(file, line))
 	{
@@ -73,8 +75,10 @@ void BitcoinExchange::readdata()
 	}
 	if (file.bad())
 		throw std::runtime_error("could not read data.csv");
+
 	if (this->_data.empty())
 		throw std::runtime_error("empty exchange database");
+
 }
 
 void BitcoinExchange::readinput(const std::string& filename) const
@@ -84,8 +88,10 @@ void BitcoinExchange::readinput(const std::string& filename) const
 
 	if (!file.is_open())
 		throw std::runtime_error("could not open file.");
+
 	if (!std::getline(file, line) || trim(line) != "date | value")
 		throw std::runtime_error("invalid input header.");
+
 	while (std::getline(file, line))
 	{
 		if (!line.empty() && line[line.size() - 1] == '\r')
@@ -101,28 +107,39 @@ void BitcoinExchange::readinput(const std::string& filename) const
 	}
 	if (file.bad())
 		throw std::runtime_error("could not read input file.");
+
 }
 
 void BitcoinExchange::exchange(const std::string& line) const
 {
 	std::string::size_type separator = line.find('|');
+
 	if (separator == std::string::npos)
 		throw std::runtime_error("bad input => " + line);
+
 	std::string date = trim(line.substr(0, separator));
 	std::string valueStr = trim(line.substr(separator + 1));
+
 	double value;
 
 	if (!validdate(date) || !readvalue(valueStr, value))
 		throw std::runtime_error("bad input => " + line);
+
 	if (value < 0)
 		throw std::runtime_error("not a positive number.");
+
 	if (value > 1000)
 		throw std::runtime_error("too large a number.");
+
 	std::map<std::string, double>::const_iterator it = this->_data.upper_bound(date);
+
 	if (it == this->_data.begin())
 		throw std::runtime_error("no exchange rate available => " + date);
+
 	--it;
+
 	std::cout << date << " => " << value << " = " << value * it->second << std::endl;
+
 }
 
 void BitcoinExchange::printdata()
